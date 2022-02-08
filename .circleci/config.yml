@@ -1,0 +1,91 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+commands:
+  create_concatenated_package_json:
+    description: "Concatenate all package.json files into single file. File is used as checksum source for part of caching key."
+    parameters:
+      filename:
+        type: string
+    steps:
+      - run:
+          name: Combine package.json files to single file
+          command: cat ./package.json > << parameters.filename >>
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  package_install:
+    docker:
+      - image: cimg/node:15.1
+    steps:
+      - checkout
+      - create_concatenated_package_json:
+          filename: combined-package-json.txt
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "combined-package-json.txt" }}
+            - v1-deps
+      - run:
+          name: Doing npm install
+          command: npm install
+      - save_cache:
+          key: v1-deps-{{ checksum "combined-package-json.txt" }}
+          paths:
+            - node_modules
+  lint:
+    docker:
+      - image: cimg/node:15.1
+    steps:
+      - checkout
+      - create_concatenated_package_json:
+          filename: combined-package-json.txt
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "combined-package-json.txt" }}
+            - v1-deps
+      - run:
+          name: Doing npm run lint on the core
+          command: npm run lint:core:ci ; cd -
+      - store_test_results:
+          path: junit
+      - store_artifacts:
+          path: junit
+  test:
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+    environment:
+      MOCHA_FILE: junit/test-results.xml
+    docker:
+      - image: cimg/node:15.1
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - create_concatenated_package_json:
+          filename: combined-package-json.txt
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "combined-package-json.txt" }}
+            - v1-deps
+      - run:
+          name: Doing npm test
+          command: npm run test:core:ci
+      - store_test_results:
+          path: junit
+      - store_artifacts:
+          path: junit
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  build:
+    jobs:
+      - package_install
+      - lint:
+          requires:
+            - package_install
+      - test:
+          requires:
+            - package_install
