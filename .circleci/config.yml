@@ -47,7 +47,7 @@ jobs:
             - v1-deps
       - run:
           name: Doing npm run lint on the core
-          command: npm run lint:core:ci ; cd -
+          command: npm run lint:core:ci
       - store_test_results:
           path: junit
       - store_artifacts:
@@ -56,7 +56,7 @@ jobs:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     environment:
-      MOCHA_FILE: junit/test-results.xml
+      MOCHA_FILE: junit/test-results-core.xml
     docker:
       - image: cimg/node:15.1
     # Add steps to the job
