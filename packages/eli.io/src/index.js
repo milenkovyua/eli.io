@@ -1,5 +1,5 @@
 const callFunction = require('./callFunction');
-const Fragment = require('./fragment');
+const Fragment = require('./Fragment');
 const { createContext } = require('./EliContext');
 const { ContextLibraryProvider, useContextLibrary, setContextLibrary } = require('./contextLibrary');
 
