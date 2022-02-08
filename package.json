@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^7.24.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-mocha": "^8.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.1",
+    "mocha": "^9.1.3",
+    "mocha-junit-reporter": "^2.0.2"
+  },
+  "scripts": {
+    "lint:core": "eslint  ./packages/eli.io",
+    "lint:core:ci": "eslint  ./packages/eli.io --format junit --output-file ./junit/eslint-core.xml",
+    "test:core": "mocha --recursive ./packages/eli.io/test --exit",
+    "test:core:ci": "mocha --recursive ./packages/eli.io/test --reporter mocha-junit-reporter --reporter-options mochaFile=./junit/test-results-core.xml --exit"
+  },
+  "author": "Yuliyan Milenkov",
+  "license": "MIT"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "eli.io",
+  "version": "0.0.1",
+  "description": "A declarative library for building JavaScript applications",
+  "main": "src/index.js",
+  "keywords": [
+    "eli.io",
+    "declarative",
+    "programming",
+    "software",
+    "development"
+  ],
+  "author": "Yuliyan Milenkov",
+  "license": "MIT"
+}
