@@ -1,0 +1,30 @@
+{
+    "env": {
+        "commonjs": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": ["standard", "plugin:mocha/recommended"],
+    "plugins": [
+        "promise",
+        "mocha"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 12
+    },
+    "rules": {
+        "comma-dangle": ["error"],
+        "no-console": 1,
+        "no-alert": 1,
+        "no-debugger": 1,
+        "promise/catch-or-return": 1,
+        "promise/always-return": 1,
+        "no-case-declarations": "warn",
+        "prefer-const": "warn",
+        "object-curly-newline": "warn",
+        "no-var": "error",
+        "indent": ["error", 4, {"SwitchCase": 1, "ignoredNodes": [ "JSXAttribute", "JSXSpreadAttribute"]}],
+        "space-before-function-paren": ["error", "never"],
+        "semi": 0
+    }
+}
